@@ -95,6 +95,7 @@ class _MedicationsScreenState extends State<MedicationsScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Action to add new medication
+          Navigator.pushNamedAndRemoveUntil(context, '/add_medication', ModalRoute.withName('/medications'));
         },
         backgroundColor: Colors.orangeAccent,
         child: const Icon(Icons.add),
