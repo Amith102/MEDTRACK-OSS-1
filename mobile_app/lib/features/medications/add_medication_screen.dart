@@ -9,7 +9,6 @@ class AddMedicationScreen extends StatefulWidget {
 
 class _AddMedicationScreenState extends State<AddMedicationScreen> {
   final _formKey = GlobalKey<FormState>();
-  TimeOfDay timeOfDay = TimeOfDay.now();
   List<bool> selectedDays = [true, true, true, true, true, true, true];
   List<String> days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
