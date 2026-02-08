@@ -132,9 +132,7 @@ class _MedicationsScreenState extends State<MedicationsScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Add medication feature coming soon!')),
-          );
+          Navigator.pushNamedAndRemoveUntil(context, '/add_medication', ModalRoute.withName('/medications'));
         },
         backgroundColor: const Color(0xFF0066CC),
         child: const Icon(Icons.add_rounded),
