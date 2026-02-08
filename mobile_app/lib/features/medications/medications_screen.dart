@@ -1,75 +1,59 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 import '../../models/medication.dart';
 
-final Random _random = Random();
-
 class MedicationsScreen extends StatefulWidget {
   const MedicationsScreen({super.key});
-  static const int n = 10;
-  static final List<Medication> medicationList = List.generate(
-    10,
-    (index) => Medication(
-      id: index.toString(),
-      name: 'Medication ${index + 1}',
-      dosage: '${(index + 1) * 10} mg',
-      time: _random.nextInt(24).toString(),
-      frequency: List.generate(7, (day) => _random.nextBool()),
-    ),
-  );
 
-  @override
-  State<MedicationsScreen> createState() => _MedicationsScreenState();
-}
-
-class _MedicationsScreenState extends State<MedicationsScreen> {
   @override
   State<MedicationsScreen> createState() => _MedicationsScreenState();
 }
 
 class _MedicationsScreenState extends State<MedicationsScreen> {
   // Mock medication data
-  final List<_Medication> medications = [
-    _Medication(
+  final List<Medication> medications = [
+    Medication(
       id: 1,
       name: 'Lisinopril',
       dosage: '10 mg',
       frequency: 'Once daily',
+      frequencyWeekly: [true, true, true, true, true, true, true],
       purpose: 'Blood pressure control',
       icon: '💊',
       color: const Color(0xFFFF6B6B),
       nextDue: '2:00 PM',
       isActive: true,
     ),
-    _Medication(
+    Medication(
       id: 2,
       name: 'Metformin',
       dosage: '500 mg',
       frequency: 'Twice daily',
+      frequencyWeekly: [true, false, true, false, true, false, true],
       purpose: 'Diabetes management',
       icon: '💉',
       color: const Color(0xFF00B4D8),
       nextDue: '1:30 PM',
       isActive: true,
     ),
-    _Medication(
+    Medication(
       id: 3,
       name: 'Atorvastatin',
       dosage: '20 mg',
       frequency: 'Once daily',
+      frequencyWeekly: [true, true, true, true, true, true, true],
       purpose: 'Cholesterol control',
       icon: '⚕️',
       color: const Color(0xFF4CAF50),
       nextDue: '8:00 PM',
       isActive: true,
     ),
-    _Medication(
+    Medication(
       id: 4,
       name: 'Aspirin',
       dosage: '81 mg',
       frequency: 'Once daily',
+      frequencyWeekly: [true, true, true, true, true, true, true],
       purpose: 'Blood thinner',
       icon: '💊',
       color: const Color(0xFFFFC107),
@@ -89,7 +73,7 @@ class _MedicationsScreenState extends State<MedicationsScreen> {
             : medications.where((m) => !m.isActive).toList();
 
     return Scaffold(
-z      appBar: AppBar(
+      appBar: AppBar(
         title: const Text('Medications'),
         elevation: 0,
       ),
@@ -144,39 +128,13 @@ z      appBar: AppBar(
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Add medication feature coming soon!')),
-          );
+          Navigator.pushNamedAndRemoveUntil(context, '/add_medication', ModalRoute.withName('/medications'));
         },
         backgroundColor: const Color(0xFF0066CC),
         child: const Icon(Icons.add_rounded),
       ),
     );
   }
-}
-
-class _Medication {
-  final int id;
-  final String name;
-  final String dosage;
-  final String frequency;
-  final String purpose;
-  final String icon;
-  final Color color;
-  final String nextDue;
-  final bool isActive;
-
-  _Medication({
-    required this.id,
-    required this.name,
-    required this.dosage,
-    required this.frequency,
-    required this.purpose,
-    required this.icon,
-    required this.color,
-    required this.nextDue,
-    required this.isActive,
-  });
 }
 
 class _FilterChip extends StatelessWidget {
@@ -217,7 +175,7 @@ class _FilterChip extends StatelessWidget {
 }
 
 class _MedicationCard extends StatelessWidget {
-  final _Medication medication;
+  final Medication medication;
 
   const _MedicationCard({required this.medication});
 
@@ -373,77 +331,6 @@ class _MedicationCard extends StatelessWidget {
             ),
           ],
         ),
-      appBar: AppBar(title: const Text('Medications')),
-      body: ListView.builder(
-        itemCount: MedicationsScreen.medicationList.length,
-        itemBuilder: (context, index) {
-          int medTime = int.parse(MedicationsScreen.medicationList[index].time);
-          return Padding(
-            padding: const EdgeInsets.only(
-              top: 8.0,
-              left: 8.0,
-              right: 8.0,
-              bottom: 0.0,
-            ),
-            child: ListTile(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-              tileColor: Colors.blueAccent,
-              title: Text(
-                MedicationsScreen.medicationList[index].name,
-                style: const TextStyle(color: Colors.white, fontSize: 24),
-              ),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Dosage: ${MedicationsScreen.medicationList[index].dosage}",
-                    style: const TextStyle(color: Colors.white70, fontSize: 16),
-                  ),
-                  Text(
-                    "Time: ${medTime % 12 == 0 ? 12 : (medTime % 12).toString()} ${medTime < 12 ? 'AM' : 'PM'}",
-                    style: const TextStyle(color: Colors.white70, fontSize: 16),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "Frequency: ",
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      ...List.generate(
-                        7,
-                        (dayIndex) => Icon(
-                          Icons.circle,
-                          color: MedicationsScreen.medicationList[index].frequency[dayIndex]
-                              ? Colors.greenAccent
-                              : Colors.redAccent,
-                          size: 15,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              onTap: () {
-                // Action to view medication details
-              },
-            ),
-          );
-        },
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Action to add new medication
-          Navigator.pushNamedAndRemoveUntil(context, '/add_medication', ModalRoute.withName('/medications'));
-        },
-        backgroundColor: Colors.orangeAccent,
-        child: const Icon(Icons.add),
       ),
     );
   }

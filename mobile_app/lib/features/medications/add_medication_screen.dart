@@ -9,8 +9,7 @@ class AddMedicationScreen extends StatefulWidget {
 
 class _AddMedicationScreenState extends State<AddMedicationScreen> {
   final _formKey = GlobalKey<FormState>();
-  TimeOfDay timeOfDay = TimeOfDay.now();
-  List<bool> selectedDays = [false, false, false, false, false, false, false];
+  List<bool> selectedDays = [true, true, true, true, true, true, true];
   List<String> days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
   @override
@@ -59,29 +58,49 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                     hintText: 'Enter dosage',
                   ),
                 ),
-                SizedBox(height: 32),
-                ElevatedButton(
-                  onPressed: () async {
-                    final TimeOfDay? picked = await showTimePicker(
-                      context: context,
-                      initialTime: timeOfDay,
-                    );
-                    if (picked != null) {
-                      setState(() {
-                        timeOfDay = picked;
-                      });
+                SizedBox(height: 16),
+                TextFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the frequency';
                     }
+                    return null;
                   },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(width: 8),
-                      Icon(Icons.access_time),
-                      SizedBox(width: 8),
-                      Text(timeOfDay.format(context).toString()),
-                      SizedBox(width: 8),
-                    ],
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey[100],
+                    hintText: 'Enter frequency',
+                  ),
+                ),
+                SizedBox(height: 16),
+                TextFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the purpose';
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey[100],
+                    hintText: 'Enter purpose',
+                  ),
+                ),
+                SizedBox(height: 16),
+                TextFormField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey[100],
+                    hintText: 'Enter an Icon',
                   ),
                 ),
                 SizedBox(height: 32),
