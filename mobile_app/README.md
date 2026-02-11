@@ -27,6 +27,19 @@ The app connects to the FastAPI backend.
 Configuration is located in `lib/core/constants/api_constants.dart`.
 Default URL: `http://127.0.0.1:8000` (for local development).
 
+
+
+## Requirements
+
+This mobile app requires a recent Flutter SDK.
+
+- Flutter >= 3.38
+- Dart >= 3.6
+
+Using older Flutter versions may cause dependency resolution failures.
+
+
+
 ## Getting Started
 
 1.  **Prerequisites**: Ensure you have Flutter SDK installed.
@@ -40,3 +53,24 @@ Default URL: `http://127.0.0.1:8000` (for local development).
 - Keep features modular.
 - Use the `lib/core` for shared logic.
 - Follow the existing folder structure.
+
+## Requirements
+
+This app requires a recent Flutter SDK.
+
+- Flutter >= 3.38
+- Dart >= 3.6
+
+Older stable Flutter versions are not supported.
+
+## Flutter Version
+
+This project uses Flutter 3.38.9.
+
+Using FVM:
+
+```bash
+fvm install
+fvm use
+fvm flutter pub get
+fvm flutter run
