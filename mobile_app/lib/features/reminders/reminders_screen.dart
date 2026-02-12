@@ -229,11 +229,13 @@ class _ReminderCardState extends State<_ReminderCard> {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          Text(
-                            '${widget.reminder.scheduledTime} • ${widget.reminder.patient}',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black54,
+                          Expanded(
+                            child: Text(
+                              '${widget.reminder.scheduledTime} • ${widget.reminder.patient}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.black54,
+                              ),
                             ),
                           ),
                         ],
