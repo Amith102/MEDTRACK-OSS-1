@@ -1,89 +1,94 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:mobile_app/features/patients/patients_screen.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
-
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  Future<void> _setLargeTestSurface(WidgetTester tester) async {
+    tester.view.devicePixelRatio = 1.0;
+    tester.view.physicalSize = const Size(1200, 2400);
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Flutter Demo Home Page'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-    );
+  Future<void> _addPatient(
+    WidgetTester tester, {
+    required String name,
+    required String age,
+    required String condition,
+  }) async {
+    await tester.tap(find.byIcon(Icons.add_circle_outline));
+    await tester.pumpAndSettle();
+
+    final textFields = find.byType(TextFormField);
+    await tester.enterText(textFields.at(0), name);
+    await tester.enterText(textFields.at(1), age);
+    await tester.tap(find.text('Male'));
+    await tester.pumpAndSettle();
+    await tester.enterText(textFields.at(2), condition);
+    final addButton = find.widgetWithText(ElevatedButton, 'Add Patient️');
+    await tester.ensureVisible(addButton);
+    await tester.tap(addButton);
+    await tester.pumpAndSettle();
+    expect(find.text('Patients'), findsOneWidget);
   }
+
+  testWidgets(
+    'added patient is shown in list and opens patient profile',
+    (WidgetTester tester) async {
+      await _setLargeTestSurface(tester);
+      await tester.pumpWidget(const MaterialApp(home: PatientsScreen()));
+
+      await _addPatient(
+        tester,
+        name: 'John Doe',
+        age: '34',
+        condition: 'Fever',
+      );
+
+      await tester.enterText(find.byType(TextField), 'John Doe');
+      await tester.pumpAndSettle();
+      final johnDoeInList = find.descendant(
+        of: find.byType(ListView),
+        matching: find.text('John Doe'),
+      );
+      expect(johnDoeInList, findsOneWidget);
+
+      await tester.tap(johnDoeInList);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Patient Profile'), findsOneWidget);
+      expect(find.text('John Doe'), findsWidgets);
+    },
+  );
+
+  testWidgets(
+    'adding patient clears active search so new row is visible',
+    (WidgetTester tester) async {
+      await _setLargeTestSurface(tester);
+      await tester.pumpWidget(const MaterialApp(home: PatientsScreen()));
+
+      await tester.enterText(
+        find.byType(TextField),
+        'NoSuchPatientShouldMatchThis',
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('Rajesh Kumar'), findsNothing);
+
+      await _addPatient(
+        tester,
+        name: 'Alice Brown',
+        age: '29',
+        condition: 'Migraine',
+      );
+
+      await tester.enterText(find.byType(TextField), 'Alice Brown');
+      await tester.pumpAndSettle();
+      final aliceInList = find.descendant(
+        of: find.byType(ListView),
+        matching: find.text('Alice Brown'),
+      );
+      expect(aliceInList, findsOneWidget);
+      expect(find.text('NoSuchPatientShouldMatchThis'), findsNothing);
+    },
+  );
 }

@@ -68,6 +68,13 @@ class _PatientsScreenState extends State<PatientsScreen> {
   String _searchQuery = '';
   String? _selectedGender;
   String? _selectedCondition;
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   List<Patient> get _filteredPatients {
     return _patients
@@ -123,18 +130,14 @@ class _PatientsScreenState extends State<PatientsScreen> {
             icon: const Icon(Icons.add_circle_outline),
             color: Theme.of(context).primaryColor,
             onPressed: () async {
-              final newPatient = await Navigator.push(
+              final newPatient = await Navigator.push<Patient>(
                 context,
                 MaterialPageRoute(
                   builder: (context) => const AddPatientScreen(),
                 ),
               );
-              if (newPatient != null && newPatient is Patient) {
-                setState(() {
-                  _patients.add(
-                    newPatient,
-                  );
-                });
+              if (newPatient != null) {
+                _addPatientToList(newPatient);
               }
             },
           ),
@@ -167,6 +170,7 @@ class _PatientsScreenState extends State<PatientsScreen> {
       padding: const EdgeInsets.all(16),
       color: Colors.white,
       child: TextField(
+        controller: _searchController,
         onChanged: (value) => setState(() => _searchQuery = value),
         decoration: InputDecoration(
           hintText: 'Search patients, conditions...',
@@ -187,6 +191,40 @@ class _PatientsScreenState extends State<PatientsScreen> {
         ),
       ),
     );
+  }
+
+  void _addPatientToList(Patient patient) {
+    final isVisibleWithCurrentView = _matchesCurrentView(patient);
+
+    setState(() {
+      _patients.add(patient);
+
+      // Ensure newly added patient is immediately visible after submission.
+      if (!isVisibleWithCurrentView) {
+        _searchQuery = '';
+        _selectedGender = null;
+        _selectedCondition = null;
+      }
+    });
+
+    if (!isVisibleWithCurrentView) {
+      _searchController.clear();
+    }
+  }
+
+  bool _matchesCurrentView(Patient patient) {
+    final query = _searchQuery.toLowerCase();
+    final matchesSearch =
+        query.isEmpty ||
+        patient.name.toLowerCase().contains(query) ||
+        patient.condition.toLowerCase().contains(query);
+
+    final matchesGender =
+        _selectedGender == null || patient.gender == _selectedGender;
+    final matchesCondition =
+        _selectedCondition == null || patient.condition == _selectedCondition;
+
+    return matchesSearch && matchesGender && matchesCondition;
   }
 
   Widget _buildActiveFilters() {

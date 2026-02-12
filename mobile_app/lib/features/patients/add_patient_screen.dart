@@ -22,6 +22,10 @@ class _AddPatientScreenState extends State<AddPatientScreen> {
   bool _isStatusFocused = false; // Tracking focus for status box
   final FocusNode _statusFocusNode = FocusNode(); // Unique node for status
 
+  String _generatePatientId() {
+    return 'P${DateTime.now().millisecondsSinceEpoch}';
+  }
+
   @override
   void dispose() {
     _genderFocusNode.dispose();
@@ -41,8 +45,9 @@ class _AddPatientScreenState extends State<AddPatientScreen> {
           padding: EdgeInsets.all(20),
           child: Form(
             key: _formKey,
-            child: Column(
-              children: [
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
                 TextFormField(
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -276,36 +281,45 @@ class _AddPatientScreenState extends State<AddPatientScreen> {
                     ),
                   ),
                 ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    foregroundColor: Colors.black,
-
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      foregroundColor: Colors.black,
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _genderError = _gender.isEmpty
-                          ? "Please Enter Patient's Gender"
-                          : null;
-                      _statusError = _status.isEmpty
-                          ? "Please Enter Patient's Status"
-                          : null;
-                    });
+                    onPressed: () {
+                      setState(() {
+                        _genderError = _gender.isEmpty
+                            ? "Please Enter Patient's Gender"
+                            : null;
+                        _statusError = _status.isEmpty
+                            ? "Please Enter Patient's Status"
+                            : null;
+                      });
 
-                    if (_formKey.currentState!.validate() &&
-                        _gender.isNotEmpty &&
-                        _status.isNotEmpty) {
-                      _formKey.currentState!.save();
-                      Navigator.pop(context);
-                    }
-                  },
-                  child: Text("Add Patient️"),
-                ),
-              ],
+                      if (_formKey.currentState!.validate() &&
+                          _gender.isNotEmpty &&
+                          _status.isNotEmpty) {
+                        _formKey.currentState!.save();
+                        final newPatient = Patient(
+                          id: _generatePatientId(),
+                          name: _name,
+                          age: _age,
+                          gender: _gender,
+                          condition: _condition,
+                          status: _status,
+                          lastVisit: DateTime.now(),
+                        );
+                        Navigator.pop(context, newPatient);
+                      }
+                    },
+                    child: Text("Add Patient️"),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
