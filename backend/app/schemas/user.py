@@ -18,3 +18,11 @@ class UserInDB(UserBase):
 
 class User(UserInDB):
     pass
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    email: Optional[str] = None
+    sub: Optional[str] = None
