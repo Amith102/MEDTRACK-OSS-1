@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mobile_app/features/patients/patients_screen.dart';
+import 'package:mobile_app/features/patients/add_patient_screen.dart';
+import 'package:mobile_app/features/patients/widgets/patient_details_view.dart';
+import 'package:mobile_app/models/patient.dart';
+import 'package:mobile_app/routes.dart';
 
 void main() {
   Future<void> _setLargeTestSurface(WidgetTester tester) async {
@@ -36,7 +40,29 @@ void main() {
     'added patient is shown in list and opens patient profile',
     (WidgetTester tester) async {
       await _setLargeTestSurface(tester);
-      await tester.pumpWidget(const MaterialApp(home: PatientsScreen()));
+      await tester.pumpWidget(
+        MaterialApp(
+          routes: getRoutes(),
+          onGenerateRoute: (settings) {
+            if (settings.name == Routes.addPatient) {
+              return MaterialPageRoute<Patient>(
+                builder: (context) => const AddPatientScreen(),
+              );
+            }
+            if (settings.name == Routes.patientDetails) {
+              if (settings.arguments is !Patient) {
+                return null;
+              }
+              final patient = settings.arguments as Patient;
+              return MaterialPageRoute(
+                builder: (context) => PatientDetailsView(patient: patient),
+              );
+            }
+            return null;
+          },
+          initialRoute: Routes.patients,
+        )
+      );
 
       await _addPatient(
         tester,
