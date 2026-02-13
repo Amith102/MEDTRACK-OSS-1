@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/routes.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+  static String route = '/';
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -14,27 +16,27 @@ class _HomeScreenState extends State<HomeScreen> {
     _NavItem(
       icon: Icons.home_rounded,
       label: 'Home',
-      route: '/',
+      route: Routes.home,
     ),
     _NavItem(
       icon: Icons.people_rounded,
       label: 'Patients',
-      route: '/patients',
+      route: Routes.patients,
     ),
     _NavItem(
       icon: Icons.medication_rounded,
       label: 'Medications',
-      route: '/medications',
+      route: Routes.medications,
     ),
     _NavItem(
       icon: Icons.schedule_rounded,
       label: 'Schedules',
-      route: '/schedules',
+      route: Routes.schedules,
     ),
     _NavItem(
       icon: Icons.notifications_rounded,
       label: 'Reminders',
-      route: '/reminders',
+      route: Routes.reminders,
     ),
   ];
 
@@ -141,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     description: 'View and manage',
                     color: const Color(0xFF0066CC),
                     onTap: () {
-                      Navigator.pushNamed(context, '/patients');
+                      Navigator.pushNamed(context, Routes.patients);
                     },
                   ),
                   _ActionCard(
@@ -150,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     description: 'Track prescribed',
                     color: const Color(0xFF00B4D8),
                     onTap: () {
-                      Navigator.pushNamed(context, '/medications');
+                      Navigator.pushNamed(context, Routes.medications);
                     },
                   ),
                   _ActionCard(
@@ -159,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     description: 'Monitor timings',
                     color: const Color(0xFFFF6B6B),
                     onTap: () {
-                      Navigator.pushNamed(context, '/schedules');
+                      Navigator.pushNamed(context, Routes.schedules);
                     },
                   ),
                   _ActionCard(
@@ -273,28 +275,28 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 IconButton(
                   onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(context, '/patients', (route) => route.isFirst);
+                    Navigator.pushNamedAndRemoveUntil(context, Routes.patients, (route) => route.isFirst);
                   },
                   icon: const Icon(Icons.people),
                   tooltip: 'View Patients',
                 ),
                 IconButton(
                   onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(context, '/medications', (route) => route.isFirst);
+                    Navigator.pushNamedAndRemoveUntil(context, Routes.medications, (route) => route.isFirst);
                   },
                   icon: const Icon(Icons.medication_liquid),
                   tooltip: 'View Medications',
                 ),
                 IconButton(
                   onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(context, '/schedules', (route) => route.isFirst);
+                    Navigator.pushNamedAndRemoveUntil(context, Routes.schedules, (route) => route.isFirst);
                   },
                   icon: const Icon(Icons.schedule),
                   tooltip: 'View Schedules',
                 ),
                 IconButton(
                   onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(context, '/reminders', (route) => route.isFirst);
+                    Navigator.pushNamedAndRemoveUntil(context, Routes.reminders, (route) => route.isFirst);
                   },
                   icon: const Icon(Icons.alarm),
                   tooltip: 'View Reminders',

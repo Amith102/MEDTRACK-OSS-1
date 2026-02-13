@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class SchedulesScreen extends StatefulWidget {
   const SchedulesScreen({super.key});
+  static String route = '/schedules';
 
   @override
   State<SchedulesScreen> createState() => _SchedulesScreenState();

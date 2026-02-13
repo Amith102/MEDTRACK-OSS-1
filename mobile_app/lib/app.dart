@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'features/home/home_screen.dart';
-import 'features/patients/patients_screen.dart';
-import 'features/medications/medications_screen.dart';
-import 'features/medications/add_medication_screen.dart';
-import 'features/schedules/schedules_screen.dart';
-import 'features/reminders/reminders_screen.dart';
+import 'package:mobile_app/features/patients/add_patient_screen.dart';
+import 'package:mobile_app/features/patients/widgets/patient_details_view.dart';
+import 'package:mobile_app/models/patient.dart';
+import 'package:mobile_app/routes.dart';
 import 'theme/app_theme.dart';
 
 class MedTrackApp extends StatelessWidget {
@@ -15,14 +13,23 @@ class MedTrackApp extends StatelessWidget {
     return MaterialApp(
       title: 'MedTrack OSS',
       theme: AppTheme.lightTheme,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const HomeScreen(),
-        '/patients': (context) => const PatientsScreen(),
-        '/medications': (context) => const MedicationsScreen(),
-        '/add_medication': (context) => const AddMedicationScreen(),
-        '/schedules': (context) => const SchedulesScreen(),
-        '/reminders': (context) => const RemindersScreen(),
+      initialRoute: Routes.home,
+      routes: getRoutes(),
+      onGenerateRoute: (settings) {
+        if (settings.name == Routes.addPatient) {
+          return MaterialPageRoute<Patient>(
+            builder: (context) => const AddPatientScreen(),
+          );
+        }
+        if (settings.name == Routes.patientDetails) {
+          final patient = settings.arguments as Patient;
+          return MaterialPageRoute(
+            builder: (context) => PatientDetailsView(patient: patient),
+          );
+        }
+        
+        // fallback for undefined routes
+        return null;
       },
     );
   }

@@ -3,6 +3,7 @@ import '../../models/patient.dart';
 
 class AddPatientScreen extends StatefulWidget {
   const AddPatientScreen({super.key});
+  static String route = '/add_patient';
 
   @override
   State<AddPatientScreen> createState() => _AddPatientScreenState();

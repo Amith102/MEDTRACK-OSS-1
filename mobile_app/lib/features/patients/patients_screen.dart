@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/routes.dart';
 import '../../models/patient.dart';
 import 'widgets/patient_card.dart';
-import 'widgets/patient_details_view.dart';
-import 'add_patient_screen.dart';
-import 'widgets/patient_filter.dart';
 
 class PatientsScreen extends StatefulWidget {
   const PatientsScreen({super.key});
+  static String route = '/patients';
 
   @override
   State<PatientsScreen> createState() => _PatientsScreenState();
@@ -142,11 +141,9 @@ class _PatientsScreenState extends State<PatientsScreen> {
             icon: const Icon(Icons.add_circle_outline),
             color: Theme.of(context).primaryColor,
             onPressed: () async {
-              final newPatient = await Navigator.push<Patient>(
+              final newPatient = await Navigator.pushNamed<Patient>(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const AddPatientScreen(),
-                ),
+                Routes.addPatient,
               );
               if (newPatient != null) {
                 _addPatientToList(newPatient);
@@ -417,11 +414,10 @@ class _PatientsScreenState extends State<PatientsScreen> {
   }
 
   void _navigateToPatientDetails(Patient patient) {
-    Navigator.push(
+    Navigator.pushNamed(
       context,
-      MaterialPageRoute(
-        builder: (context) => PatientDetailsView(patient: patient),
-      ),
+      Routes.patientDetails,
+      arguments: patient,
     );
   }
 }
