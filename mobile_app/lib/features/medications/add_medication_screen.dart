@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AddMedicationScreen extends StatefulWidget {
   const AddMedicationScreen({super.key});
-  static String route = '/add_medication';
+  static const String route = '/add_medication';
 
   @override
   State<AddMedicationScreen> createState() => _AddMedicationScreenState();

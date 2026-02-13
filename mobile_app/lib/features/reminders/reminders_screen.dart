@@ -3,7 +3,7 @@ import 'package:mobile_app/routes.dart';
 
 class RemindersScreen extends StatefulWidget {
   const RemindersScreen({super.key});
-  static String route = '/reminders';
+  static const String route = '/reminders';
 
   @override
   State<RemindersScreen> createState() => _RemindersScreenState();

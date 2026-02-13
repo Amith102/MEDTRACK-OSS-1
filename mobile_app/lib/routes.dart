@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:mobile_app/features/home/home_screen.dart';
 import 'package:mobile_app/features/medications/add_medication_screen.dart';
 import 'package:mobile_app/features/medications/medications_screen.dart';
@@ -11,20 +12,20 @@ import 'package:mobile_app/features/schedules/schedule_appointment_view.dart';
 import 'package:mobile_app/features/schedules/schedules_screen.dart';
 
 class Routes {
-  static final String home = HomeScreen.route;
-  static final String patients = PatientsScreen.route;
-  static final String patientDetails = PatientDetailsView.route;
-  static final String addPatient = AddPatientScreen.route;
-  static final String addPatientNote = AddPatientNoteView.route;
-  static final String medications = MedicationsScreen.route;
-  static final String addMedication = AddMedicationScreen.route;
-  static final String schedules = SchedulesScreen.route;
-  static final String scheduleAppointment = ScheduleAppointmentView.route;
-  static final String reminders = RemindersScreen.route;
-  static final String addReminder = AddReminderScreen.route;
+  static const String home = HomeScreen.route;
+  static const String patients = PatientsScreen.route;
+  static const String patientDetails = PatientDetailsView.route;
+  static const String addPatient = AddPatientScreen.route;
+  static const String addPatientNote = AddPatientNoteView.route;
+  static const String medications = MedicationsScreen.route;
+  static const String addMedication = AddMedicationScreen.route;
+  static const String schedules = SchedulesScreen.route;
+  static const String scheduleAppointment = ScheduleAppointmentView.route;
+  static const String reminders = RemindersScreen.route;
+  static const String addReminder = AddReminderScreen.route;
 }
 
-getRoutes() {
+Map<String, WidgetBuilder> getRoutes() {
   return {
     Routes.home: (context) => const HomeScreen(),
     Routes.patients: (context) => const PatientsScreen(),

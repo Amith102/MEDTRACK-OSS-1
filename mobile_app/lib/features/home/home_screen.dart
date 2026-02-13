@@ -3,7 +3,7 @@ import 'package:mobile_app/routes.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-  static String route = '/';
+  static const String route = '/';
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();

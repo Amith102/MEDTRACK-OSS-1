@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class AddReminderScreen extends StatefulWidget {
   const AddReminderScreen({super.key});
-  static String route = '/add-reminder';
+  static const String route = '/add_reminder';
 
   @override
   State<AddReminderScreen> createState() => _AddReminderScreenState();

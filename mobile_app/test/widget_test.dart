@@ -44,21 +44,7 @@ void main() {
         MaterialApp(
           routes: getRoutes(),
           onGenerateRoute: (settings) {
-            if (settings.name == Routes.addPatient) {
-              return MaterialPageRoute<Patient>(
-                builder: (context) => const AddPatientScreen(),
-              );
-            }
-            if (settings.name == Routes.patientDetails) {
-              if (settings.arguments is !Patient) {
-                return null;
-              }
-              final patient = settings.arguments as Patient;
-              return MaterialPageRoute(
-                builder: (context) => PatientDetailsView(patient: patient),
-              );
-            }
-            return null;
+            return generateRoute(settings);
           },
           initialRoute: Routes.patients,
         )
@@ -95,21 +81,7 @@ void main() {
         MaterialApp(
           routes: getRoutes(),
           onGenerateRoute: (settings) {
-            if (settings.name == Routes.addPatient) {
-              return MaterialPageRoute<Patient>(
-                builder: (context) => const AddPatientScreen(),
-              );
-            }
-            if (settings.name == Routes.patientDetails) {
-              if (settings.arguments is !Patient) {
-                return null;
-              }
-              final patient = settings.arguments as Patient;
-              return MaterialPageRoute(
-                builder: (context) => PatientDetailsView(patient: patient),
-              );
-            }
-            return null;
+            return generateRoute(settings);
           },
           initialRoute: Routes.patients,
         )
@@ -139,4 +111,22 @@ void main() {
       expect(find.text('NoSuchPatientShouldMatchThis'), findsNothing);
     },
   );
+}
+
+MaterialPageRoute<dynamic>? generateRoute(RouteSettings settings) {
+  if (settings.name == Routes.addPatient) {
+    return MaterialPageRoute<Patient>(
+      builder: (context) => const AddPatientScreen(),
+    );
+  }
+  if (settings.name == Routes.patientDetails) {
+    if (settings.arguments is !Patient) {
+      return null;
+    }
+    final patient = settings.arguments as Patient;
+    return MaterialPageRoute(
+      builder: (context) => PatientDetailsView(patient: patient),
+    );
+  }
+  return null;
 }

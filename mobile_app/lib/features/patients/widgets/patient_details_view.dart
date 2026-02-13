@@ -5,7 +5,7 @@ import '../../../models/patient.dart';
 
 class PatientDetailsView extends StatelessWidget {
   final Patient patient;
-  static String route = '/patient_details_view';
+  static const String route = '/patient_details_view';
 
   const PatientDetailsView({super.key, required this.patient});
 

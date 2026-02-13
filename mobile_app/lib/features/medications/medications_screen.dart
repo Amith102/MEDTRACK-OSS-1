@@ -5,7 +5,7 @@ import '../../models/medication.dart';
 
 class MedicationsScreen extends StatefulWidget {
   const MedicationsScreen({super.key});
-  static String route = '/medications';
+  static const String route = '/medications';
 
   @override
   State<MedicationsScreen> createState() => _MedicationsScreenState();
