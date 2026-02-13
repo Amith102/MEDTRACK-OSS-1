@@ -25,6 +25,7 @@ class MedTrackApp extends StatelessWidget {
               builder: (context) => ScheduleAppointmentView(patient: patient),
             );
           }
+          return MaterialPageRoute(builder: (context) => _errorScreen());
         }
         if (settings.name == Routes.addPatient) {
           return MaterialPageRoute<Patient>(
@@ -38,6 +39,7 @@ class MedTrackApp extends StatelessWidget {
               builder: (context) => AddPatientNoteView(patient: patient),
             );
           }
+          return MaterialPageRoute(builder: (context) => _errorScreen());
         }
         if (settings.name == Routes.patientDetails) {
           if (settings.arguments is Patient) {
@@ -46,11 +48,19 @@ class MedTrackApp extends StatelessWidget {
               builder: (context) => PatientDetailsView(patient: patient),
             );
           }
+          return MaterialPageRoute(builder: (context) => _errorScreen());
         }
         
         // fallback for undefined routes
         return null;
       },
+    );
+  }
+
+  Widget _errorScreen() {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Error')),
+      body: const Center(child: Text('An unexpected error occurred.')),
     );
   }
 }
