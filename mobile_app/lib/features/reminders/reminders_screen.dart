@@ -246,7 +246,7 @@ class _ReminderCardState extends State<_ReminderCard> {
                         ),
                       );
                     },
-                    activeColor: typeColor,
+                    activeThumbColor: typeColor,
                   ),
                 ),
               ],

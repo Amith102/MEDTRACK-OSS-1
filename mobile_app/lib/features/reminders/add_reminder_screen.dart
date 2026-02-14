@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/reminder.dart';
-import '../../routes.dart';
 
 class AddReminderScreen extends StatefulWidget {
   const AddReminderScreen({super.key});
@@ -17,8 +15,8 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
   String _medicationName = '';
   String _patientName = '';
   TimeOfDay _scheduledTime = TimeOfDay.now();
-  List<String> _type = ['Morning', 'Afternoon', 'Evening', 'Weekly'];
-  bool _isEnabled = true;
+  final List<String> _type = ['Morning', 'Afternoon', 'Evening', 'Weekly'];
+  final bool _isEnabled = true;
   int _notificationCount = 1;
   int id = 5;
   String? _selectedType;
@@ -122,7 +120,7 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
                           }
                           return null;
                         },
-                        value: _selectedType,
+                        initialValue: _selectedType,
                         hint: const Text("Type"),
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
@@ -165,7 +163,7 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
                             _selectedType = value as String;
                           });
                         },
-                        onSaved: (value) => _selectedType = value as String?,
+                        onSaved: (value) => _selectedType = value,
                       ),
                       SizedBox(height: 15),
                       Card(
@@ -185,7 +183,7 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
                               color: Colors.blue,
                             ),
                             subtitle: Text(
-                              "${_scheduledTime.format(context)}",
+                              _scheduledTime.format(context),
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 18,
@@ -228,7 +226,7 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
                           leading: Icon(Icons.notification_add),
                           iconColor: Colors.blue,
                           subtitle: Text(
-                              "${_notificationCount} ${_notificationCount == 1 ? 'notification' : 'notifications'} before"),
+                              "$_notificationCount ${_notificationCount == 1 ? 'notification' : 'notifications'} before"),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -243,16 +241,17 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
                                 icon: Icon(Icons.remove),
                               ),
                               Text(
-                                "${_notificationCount}",
+                                "$_notificationCount",
                                 style: TextStyle(
                                     fontSize: 14, fontWeight: FontWeight.bold),
                               ),
                               IconButton(
                                 onPressed: () {
-                                  if (_notificationCount < 5)
+                                  if (_notificationCount < 5) {
                                     setState(() {
                                       _notificationCount++;
                                     });
+                                  }
                                 },
                                 icon: Icon(Icons.add),
                               ),

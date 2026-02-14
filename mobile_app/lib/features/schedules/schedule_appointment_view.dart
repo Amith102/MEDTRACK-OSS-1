@@ -8,7 +8,8 @@ class ScheduleAppointmentView extends StatefulWidget {
   const ScheduleAppointmentView({super.key, required this.patient});
 
   @override
-  State<ScheduleAppointmentView> createState() => _ScheduleAppointmentViewState();
+  State<ScheduleAppointmentView> createState() =>
+      _ScheduleAppointmentViewState();
 }
 
 class _ScheduleAppointmentViewState extends State<ScheduleAppointmentView> {
@@ -170,7 +171,7 @@ class _ScheduleAppointmentViewState extends State<ScheduleAppointmentView> {
 
   Widget _buildTypeDropdown(BuildContext context) {
     return DropdownButtonFormField<String>(
-      value: _selectedType,
+      initialValue: _selectedType,
       decoration: InputDecoration(
         labelText: 'Type',
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
@@ -213,7 +214,7 @@ class _ScheduleAppointmentViewState extends State<ScheduleAppointmentView> {
         );
         return;
       }
-      
+
       // Here you would typically save the appointment to a database
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Appointment Scheduled Successfully')),

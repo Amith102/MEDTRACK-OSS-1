@@ -44,13 +44,14 @@ class _AddPatientNoteViewState extends State<AddPatientNoteView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-               _buildPatientInfoCard(context),
+              _buildPatientInfoCard(context),
               const SizedBox(height: 24),
               DropdownButtonFormField<String>(
-                value: _selectedCategory,
+                initialValue: _selectedCategory,
                 decoration: InputDecoration(
                   labelText: 'Category',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12)),
                   prefixIcon: const Icon(Icons.label),
                 ),
                 items: _categories.map((String category) {
@@ -72,7 +73,8 @@ class _AddPatientNoteViewState extends State<AddPatientNoteView> {
                 controller: _titleController,
                 decoration: InputDecoration(
                   labelText: 'Title',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12)),
                   prefixIcon: const Icon(Icons.title),
                 ),
                 validator: (value) {
@@ -87,7 +89,8 @@ class _AddPatientNoteViewState extends State<AddPatientNoteView> {
                 controller: _noteController,
                 decoration: InputDecoration(
                   labelText: 'Content',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12)),
                   prefixIcon: const Icon(Icons.description),
                   alignLabelWithHint: true,
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/navigation/widgets/main_screen.dart';
 import 'package:mobile_app/features/home/home_screen.dart';
 import 'package:mobile_app/features/medications/add_medication_screen.dart';
 import 'package:mobile_app/features/medications/medications_screen.dart';
@@ -27,7 +28,7 @@ class Routes {
 
 Map<String, WidgetBuilder> getRoutes() {
   return {
-    Routes.home: (context) => const HomeScreen(),
+    Routes.home: (context) => const MainScreen(),
     Routes.patients: (context) => const PatientsScreen(),
     Routes.medications: (context) => const MedicationsScreen(),
     Routes.addMedication: (context) => const AddMedicationScreen(),

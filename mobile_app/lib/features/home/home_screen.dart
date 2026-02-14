@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/routes.dart';
+import 'package:mobile_app/navigation/widgets/main_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,36 +11,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
-
-  final List<_NavItem> _navItems = [
-    _NavItem(
-      icon: Icons.home_rounded,
-      label: 'Home',
-      route: Routes.home,
-    ),
-    _NavItem(
-      icon: Icons.people_rounded,
-      label: 'Patients',
-      route: Routes.patients,
-    ),
-    _NavItem(
-      icon: Icons.medication_rounded,
-      label: 'Medications',
-      route: Routes.medications,
-    ),
-    _NavItem(
-      icon: Icons.schedule_rounded,
-      label: 'Schedules',
-      route: Routes.schedules,
-    ),
-    _NavItem(
-      icon: Icons.notifications_rounded,
-      label: 'Reminders',
-      route: Routes.reminders,
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -143,7 +114,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     description: 'View and manage',
                     color: const Color(0xFF0066CC),
                     onTap: () {
-                      Navigator.pushNamed(context, Routes.patients);
+                      final mainState =
+                          context.findAncestorStateOfType<MainScreenState>();
+                      if (mainState != null) {
+                        mainState.switchTab(1);
+                      } else {
+                        Navigator.pushNamed(context, Routes.patients);
+                      }
                     },
                   ),
                   _ActionCard(
@@ -152,7 +129,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     description: 'Track prescribed',
                     color: const Color(0xFF00B4D8),
                     onTap: () {
-                      Navigator.pushNamed(context, Routes.medications);
+                      final mainState =
+                          context.findAncestorStateOfType<MainScreenState>();
+                      if (mainState != null) {
+                        mainState.switchTab(2);
+                      } else {
+                        Navigator.pushNamed(context, Routes.medications);
+                      }
                     },
                   ),
                   _ActionCard(
@@ -161,7 +144,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     description: 'Monitor timings',
                     color: const Color(0xFFFF6B6B),
                     onTap: () {
-                      Navigator.pushNamed(context, Routes.schedules);
+                      final mainState =
+                          context.findAncestorStateOfType<MainScreenState>();
+                      if (mainState != null) {
+                        mainState.switchTab(3);
+                      } else {
+                        Navigator.pushNamed(context, Routes.schedules);
+                      }
                     },
                   ),
                   _ActionCard(
@@ -171,7 +160,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: const Color(0xFF4CAF50),
                     onTap: () {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Adherence feature coming soon!')),
+                        const SnackBar(
+                            content: Text('Adherence feature coming soon!')),
                       );
                     },
                   ),
@@ -265,61 +255,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(color: Colors.blue.shade100),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(context, Routes.patients, (route) => route.isFirst);
-                  },
-                  icon: const Icon(Icons.people),
-                  tooltip: 'View Patients',
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(context, Routes.medications, (route) => route.isFirst);
-                  },
-                  icon: const Icon(Icons.medication_liquid),
-                  tooltip: 'View Medications',
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(context, Routes.schedules, (route) => route.isFirst);
-                  },
-                  icon: const Icon(Icons.schedule),
-                  tooltip: 'View Schedules',
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(context, Routes.reminders, (route) => route.isFirst);
-                  },
-                  icon: const Icon(Icons.alarm),
-                  tooltip: 'View Reminders',
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
-}
-
-class _NavItem {
-  final IconData icon;
-  final String label;
-  final String route;
-
-  _NavItem({
-    required this.icon,
-    required this.label,
-    required this.route,
-  });
 }
 
 class _ActionCard extends StatelessWidget {
