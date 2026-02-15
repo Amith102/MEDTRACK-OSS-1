@@ -62,7 +62,7 @@ class _ProfessionalPatientsScreenState extends State<ProfessionalPatientsScreen>
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // TODO: Navigate to Add Patient screen
+          Navigator.pushNamed(context, Routes.addPatient);
         },
         child: const Icon(Icons.add),
       ),
