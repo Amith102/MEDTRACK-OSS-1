@@ -11,6 +11,7 @@ import 'package:mobile_app/features/reminders/add_reminder_screen.dart';
 import 'package:mobile_app/features/reminders/reminders_screen.dart';
 import 'package:mobile_app/features/schedules/schedule_appointment_view.dart';
 import 'package:mobile_app/features/schedules/schedules_screen.dart';
+import 'package:mobile_app/features/patients/professional_patients_screen.dart';
 
 class Routes {
   static const String home = HomeScreen.route;
@@ -24,12 +25,14 @@ class Routes {
   static const String scheduleAppointment = ScheduleAppointmentView.route;
   static const String reminders = RemindersScreen.route;
   static const String addReminder = AddReminderScreen.route;
+  static const String professionalPatients = ProfessionalPatientsScreen.route;
 }
 
 Map<String, WidgetBuilder> getRoutes() {
   return {
     Routes.home: (context) => const MainScreen(),
     Routes.patients: (context) => const PatientsScreen(),
+    Routes.professionalPatients: (context) => const ProfessionalPatientsScreen(),
     Routes.medications: (context) => const MedicationsScreen(),
     Routes.addMedication: (context) => const AddMedicationScreen(),
     Routes.schedules: (context) => const SchedulesScreen(),

@@ -5,6 +5,7 @@ import 'widgets/patient_card.dart';
 
 class ProfessionalPatientsScreen extends StatefulWidget {
   const ProfessionalPatientsScreen({super.key});
+  static const String route = '/professional-patients';
 
   @override
   State<ProfessionalPatientsScreen> createState() => _ProfessionalPatientsScreenState();
@@ -12,7 +13,56 @@ class ProfessionalPatientsScreen extends StatefulWidget {
 
 class _ProfessionalPatientsScreenState extends State<ProfessionalPatientsScreen> {
   final List<Patient> _patients = [
-    // same patient list as before
+    Patient(
+      id: 'P001',
+      name: 'Rajesh Kumar',
+      age: 45,
+      gender: 'Male',
+      condition: 'Hypertension',
+      status: 'Stable',
+      lastVisit: DateTime.now().subtract(const Duration(days: 2)),
+      phoneNumber: '+91 98765 43210',
+    ),
+    Patient(
+      id: 'P002',
+      name: 'Priya Sharma',
+      age: 62,
+      gender: 'Female',
+      condition: 'Type 2 Diabetes',
+      status: 'Recovering',
+      lastVisit: DateTime.now().subtract(const Duration(days: 5)),
+      phoneNumber: '+91 87654 32109',
+    ),
+    Patient(
+      id: 'P003',
+      name: 'Amit Patel',
+      age: 28,
+      gender: 'Male',
+      condition: 'Asthma',
+      status: 'Stable',
+      lastVisit: DateTime.now().subtract(const Duration(days: 12)),
+      phoneNumber: '+91 76543 21098',
+    ),
+    Patient(
+      id: 'P004',
+      name: 'Suresh Iyer',
+      age: 75,
+      gender: 'Male',
+      condition: 'Post-Surgery (Knee)',
+      status: 'Critical',
+      lastVisit: DateTime.now().subtract(const Duration(hours: 4)),
+      phoneNumber: '+91 65432 10987',
+    ),
+    Patient(
+      id: 'P005',
+      name: 'Lakshmi Narayan',
+      age: 54,
+      gender: 'Female',
+      condition: 'Migraine',
+      status: 'Stable',
+      lastVisit: DateTime.now().subtract(const Duration(days: 20)),
+      phoneNumber: '+91 99887 76655',
+    ),
   ];
 
   String _searchQuery = '';
