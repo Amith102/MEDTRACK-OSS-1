@@ -129,6 +129,7 @@ class _MedicationsScreenState extends State<MedicationsScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'medication_fab',
         onPressed: () {
           Navigator.pushNamedAndRemoveUntil(context, Routes.addMedication, ModalRoute.withName(Routes.medications));
         },

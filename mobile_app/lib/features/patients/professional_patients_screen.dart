@@ -111,6 +111,7 @@ class _ProfessionalPatientsScreenState extends State<ProfessionalPatientsScreen>
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: "professional_patient_fab",
         onPressed: () {
           Navigator.pushNamed(context, Routes.addPatient);
         },

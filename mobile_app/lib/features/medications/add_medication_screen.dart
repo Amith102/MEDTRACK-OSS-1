@@ -151,6 +151,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
         )
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: "add_medication_fab",
         onPressed: () {
           if (_formKey.currentState!.validate()) {
             if (!selectedDays.contains(true)) {
