@@ -125,6 +125,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
             });
           }
         },
+        heroTag: 'add_reminder_fab',
         backgroundColor: const Color(0xFF0066CC),
         child: const Icon(Icons.add_rounded),
       ),

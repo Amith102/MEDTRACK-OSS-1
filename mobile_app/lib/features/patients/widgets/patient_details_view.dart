@@ -38,6 +38,7 @@ class _PatientDetailsViewState extends State<PatientDetailsView> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () => Navigator.of(context).pop(_currentPatient),
+            // onPressed: () => Navigator.pop(context, _currentPatient),
             tooltip: 'Back',
           ),
           title: const Text('Patient Profile'),
@@ -60,50 +61,14 @@ class _PatientDetailsViewState extends State<PatientDetailsView> {
                       children: [
                         Icon(Icons.delete, color: Colors.red),
                         SizedBox(width: 8),
-                        Text('Delete Patient', style: TextStyle(color: Colors.red)),
+                        Text('Delete Patient',
+                            style: TextStyle(color: Colors.red)),
                       ],
                     ),
                   ),
                 ];
               },
             ),
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context, _currentPatient),
-          tooltip: 'Back',
-        ),
-        title: const Text('Patient Profile'),
-        actions: [
-          IconButton(
-            onPressed: () async {
-              final result = await Navigator.pushNamed(
-                context,
-                Routes.addPatient,
-                arguments: _currentPatient,
-              );
-              if (result is Patient) {
-                setState(() {
-                  _currentPatient = result;
-                });
-              }
-            },
-            icon: const Icon(Icons.edit),
-          ),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildHeader(context),
-            const SizedBox(height: 16),
-            _buildStatsGrid(context),
-            const SizedBox(height: 16),
-            _buildActionButtons(context),
-            const SizedBox(height: 24),
-            _buildMedicalHistory(context),
           ],
         ),
         body: SingleChildScrollView(
@@ -157,9 +122,9 @@ class _PatientDetailsViewState extends State<PatientDetailsView> {
               child: Text(
                 _currentPatient.name.substring(0, 1).toUpperCase(),
                 style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
               ),
             ),
           ),
@@ -281,9 +246,9 @@ class _PatientDetailsViewState extends State<PatientDetailsView> {
           Text(
             value,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                ),
           ),
           Text(
             unit,
@@ -302,13 +267,23 @@ class _PatientDetailsViewState extends State<PatientDetailsView> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _buildActionButton(context, Icons.call, 'Call', Colors.green,onTap: (){
-            makePhoneCall(_currentPatient.phoneNumber);
+          _buildActionButton(context, Icons.call, 'Call', Colors.green,
+              onTap: () {
+            try {
+              makePhoneCall(_currentPatient.phoneNumber);
+            } catch (e) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('Could not launch phone dialer: $e'),
+              ));
+            }
           }),
-          _buildActionButton(context, Icons.message, 'Message', Colors.blue, onTap: () {
+          _buildActionButton(context, Icons.message, 'Message', Colors.blue,
+              onTap: () {
             sendSms(_currentPatient.phoneNumber);
           }),
-          _buildActionButton(context, Icons.calendar_today, 'Schedule', Colors.purple, onTap: () async {
+          _buildActionButton(
+              context, Icons.calendar_today, 'Schedule', Colors.purple,
+              onTap: () async {
             final result = await Navigator.pushNamed(
               context,
               Routes.scheduleAppointment,
@@ -319,17 +294,20 @@ class _PatientDetailsViewState extends State<PatientDetailsView> {
                 _currentPatient.appointments.add(result);
               });
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Appointment scheduled for ${result.date.day}/${result.date.month}')),
+                SnackBar(
+                    content: Text(
+                        'Appointment scheduled for ${result.date.day}/${result.date.month}')),
               );
             }
           }),
-          _buildActionButton(context, Icons.note_add, 'Add Note', Colors.orange, onTap: () async {
+          _buildActionButton(context, Icons.note_add, 'Add Note', Colors.orange,
+              onTap: () async {
             final result = await Navigator.pushNamed(
               context,
               Routes.addPatientNote,
               arguments: _currentPatient,
             );
-            
+
             if (result != null && result is PatientNote) {
               setState(() {
                 _currentPatient.notes.add(result);
@@ -344,7 +322,9 @@ class _PatientDetailsViewState extends State<PatientDetailsView> {
     );
   }
 
-  Widget _buildActionButton(BuildContext context, IconData icon, String label, Color color, {VoidCallback? onTap}) {
+  Widget _buildActionButton(
+      BuildContext context, IconData icon, String label, Color color,
+      {VoidCallback? onTap}) {
     return InkWell(
       onTap: onTap,
       child: Column(
@@ -355,9 +335,10 @@ class _PatientDetailsViewState extends State<PatientDetailsView> {
             child: Icon(icon, color: color),
           ),
           const SizedBox(height: 8),
-          Text(label, style: Theme.of(context).textTheme.labelSmall?.copyWith(
-            fontWeight: FontWeight.w600,
-          )),
+          Text(label,
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  )),
         ],
       ),
     );
@@ -387,14 +368,19 @@ class _PatientDetailsViewState extends State<PatientDetailsView> {
               );
             }),
           if (_currentPatient.appointments.isEmpty)
-             Padding(
-               padding: const EdgeInsets.only(bottom: 12.0),
-               child: Text("No upcoming appointments", style: TextStyle(color: Colors.grey[600], fontStyle: FontStyle.italic)),
-             ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12.0),
+              child: Text("No upcoming appointments",
+                  style: TextStyle(
+                      color: Colors.grey[600], fontStyle: FontStyle.italic)),
+            ),
           const Divider(height: 32),
           Text(
             'History',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 12),
           _buildHistoryItem(
@@ -422,6 +408,7 @@ class _PatientDetailsViewState extends State<PatientDetailsView> {
     );
   }
 
+  Widget _buildNotesList(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -516,7 +503,8 @@ class _PatientDetailsViewState extends State<PatientDetailsView> {
   }
 
   Future<void> _editNote(PatientNote note) async {
-    final result = await Navigator.pushNamed(context, Routes.addPatientNote, arguments: {
+    final result =
+        await Navigator.pushNamed(context, Routes.addPatientNote, arguments: {
       'patient': _currentPatient,
       'note': note,
     });
@@ -604,7 +592,8 @@ class _PatientDetailsViewState extends State<PatientDetailsView> {
       builder: (context) {
         return AlertDialog(
           title: const Text('Delete Patient'),
-          content: Text('Are you sure you want to delete ${_currentPatient.name}? This action cannot be undone.'),
+          content: Text(
+              'Are you sure you want to delete ${_currentPatient.name}? This action cannot be undone.'),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
@@ -628,15 +617,12 @@ class _PatientDetailsViewState extends State<PatientDetailsView> {
   }
 }
 
-Future<void> makePhoneCall(String phoneNumber)  async{
-  final Uri launchUri = Uri(
-    scheme: 'tel',
-    path: phoneNumber
-  );
-  if(await canLaunchUrl(launchUri)){
+Future<void> makePhoneCall(String phoneNumber) async {
+  final Uri launchUri = Uri(scheme: 'tel', path: phoneNumber);
+  if (await canLaunchUrl(launchUri)) {
     await launchUrl(launchUri);
   } else {
-    throw 'Could not launch $phoneNumber';
+    throw StateError('Could not launch $phoneNumber');
   }
 }
 

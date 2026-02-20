@@ -11,10 +11,12 @@ class ProfessionalPatientsScreen extends StatefulWidget {
   static const String route = '/professional-patients';
 
   @override
-  State<ProfessionalPatientsScreen> createState() => _ProfessionalPatientsScreenState();
+  State<ProfessionalPatientsScreen> createState() =>
+      _ProfessionalPatientsScreenState();
 }
 
-class _ProfessionalPatientsScreenState extends State<ProfessionalPatientsScreen> {
+class _ProfessionalPatientsScreenState
+    extends State<ProfessionalPatientsScreen> {
   final List<Patient> _patients = [
     Patient(
       id: 'P001',
@@ -40,7 +42,8 @@ class _ProfessionalPatientsScreenState extends State<ProfessionalPatientsScreen>
           id: const Uuid().v4(),
           patientId: 'P001',
           title: 'Initial Consultation',
-          content: 'Patient reported persistent headaches. Recommended further tests.',
+          content:
+              'Patient reported persistent headaches. Recommended further tests.',
           category: 'Medical Condition',
           date: DateTime.now().subtract(const Duration(days: 2)),
         ),
@@ -94,17 +97,22 @@ class _ProfessionalPatientsScreenState extends State<ProfessionalPatientsScreen>
   String? _selectedCondition;
   String _sortBy = 'Name';
 
-  List<String> get _availableGenders => _patients.map((p) => p.gender).toSet().toList()..sort();
-  List<String> get _availableConditions => _patients.map((p) => p.condition).toSet().toList()..sort();
+  List<String> get _availableGenders =>
+      _patients.map((p) => p.gender).toSet().toList()..sort();
+  List<String> get _availableConditions =>
+      _patients.map((p) => p.condition).toSet().toList()..sort();
 
   List<Patient> get _filteredPatients {
     var filtered = _patients.where((p) {
-      final matchesQuery = p.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          p.condition.toLowerCase().contains(_searchQuery.toLowerCase());
+      final matchesQuery =
+          p.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+              p.condition.toLowerCase().contains(_searchQuery.toLowerCase());
       final matchesStatus = _statusFilter == 'All' || p.status == _statusFilter;
-      final matchesGender = _selectedGender == null || p.gender == _selectedGender;
-      final matchesCondition = _selectedCondition == null || p.condition == _selectedCondition;
-      
+      final matchesGender =
+          _selectedGender == null || p.gender == _selectedGender;
+      final matchesCondition =
+          _selectedCondition == null || p.condition == _selectedCondition;
+
       return matchesQuery && matchesStatus && matchesGender && matchesCondition;
     }).toList();
 
@@ -119,11 +127,16 @@ class _ProfessionalPatientsScreenState extends State<ProfessionalPatientsScreen>
         filtered.sort((a, b) => b.lastVisit.compareTo(a.lastVisit));
         break;
     }
-    
+
     return filtered;
   }
 
-  final List<String> _statusOptions = ['All', 'Stable', 'Recovering', 'Critical'];
+  final List<String> _statusOptions = [
+    'All',
+    'Stable',
+    'Recovering',
+    'Critical'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -138,8 +151,8 @@ class _ProfessionalPatientsScreenState extends State<ProfessionalPatientsScreen>
           IconButton(
             icon: Icon(
               Icons.filter_list,
-              color: (_selectedGender != null || _selectedCondition != null) 
-                  ? Colors.blueAccent 
+              color: (_selectedGender != null || _selectedCondition != null)
+                  ? Colors.blueAccent
                   : Colors.grey[700],
             ),
             onPressed: _openFilterSheet,
@@ -150,7 +163,8 @@ class _ProfessionalPatientsScreenState extends State<ProfessionalPatientsScreen>
         children: [
           _buildSearchBar(),
           _buildFilterChips(),
-          if (_selectedGender != null || _selectedCondition != null) _buildActiveFilters(),
+          if (_selectedGender != null || _selectedCondition != null)
+            _buildActiveFilters(),
           Expanded(
             child: _filteredPatients.isEmpty
                 ? _buildEmptyState()
@@ -170,13 +184,15 @@ class _ProfessionalPatientsScreenState extends State<ProfessionalPatientsScreen>
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final newPatient = await Navigator.pushNamed(context, Routes.addPatient);
+          final newPatient =
+              await Navigator.pushNamed(context, Routes.addPatient);
           if (newPatient != null && newPatient is Patient) {
             setState(() {
               _patients.add(newPatient);
             });
           }
         },
+        heroTag: 'add_professional_patient_fab',
         child: const Icon(Icons.add),
       ),
     );
@@ -192,7 +208,8 @@ class _ProfessionalPatientsScreenState extends State<ProfessionalPatientsScreen>
           prefixIcon: const Icon(Icons.search),
           filled: true,
           fillColor: Colors.white,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide.none,
@@ -228,11 +245,11 @@ class _ProfessionalPatientsScreenState extends State<ProfessionalPatientsScreen>
               ),
             ),
           TextButton(
-             onPressed: () => setState(() {
-               _selectedGender = null;
-               _selectedCondition = null;
-             }),
-             child: const Text('Clear All'),
+            onPressed: () => setState(() {
+              _selectedGender = null;
+              _selectedCondition = null;
+            }),
+            child: const Text('Clear All'),
           )
         ],
       ),
@@ -269,7 +286,10 @@ class _ProfessionalPatientsScreenState extends State<ProfessionalPatientsScreen>
           const SizedBox(height: 16),
           Text(
             'No patients found',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.grey[600]),
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(color: Colors.grey[600]),
           ),
         ],
       ),
@@ -345,7 +365,7 @@ class _ProfessionalPatientsScreenState extends State<ProfessionalPatientsScreen>
                   ),
                   const Divider(),
                   const SizedBox(height: 10),
-                  
+
                   // Sort By
                   Text(
                     'Sort By',
@@ -378,10 +398,12 @@ class _ProfessionalPatientsScreenState extends State<ProfessionalPatientsScreen>
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
                     ),
                     items: [
-                      const DropdownMenuItem(value: null, child: Text('All Genders')),
+                      const DropdownMenuItem(
+                          value: null, child: Text('All Genders')),
                       ..._availableGenders.map((g) => DropdownMenuItem(
                             value: g,
                             child: Text(g),
@@ -402,10 +424,12 @@ class _ProfessionalPatientsScreenState extends State<ProfessionalPatientsScreen>
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
                     ),
-                     items: [
-                      const DropdownMenuItem(value: null, child: Text('All Conditions')),
+                    items: [
+                      const DropdownMenuItem(
+                          value: null, child: Text('All Conditions')),
                       ..._availableConditions.map((c) => DropdownMenuItem(
                             value: c,
                             child: Text(c, overflow: TextOverflow.ellipsis),
@@ -417,7 +441,7 @@ class _ProfessionalPatientsScreenState extends State<ProfessionalPatientsScreen>
                     },
                   ),
                   const SizedBox(height: 24),
-                  
+
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
