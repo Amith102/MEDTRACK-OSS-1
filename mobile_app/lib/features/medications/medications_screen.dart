@@ -130,7 +130,8 @@ class _MedicationsScreenState extends State<MedicationsScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamedAndRemoveUntil(context, Routes.addMedication, ModalRoute.withName(Routes.medications));
+          Navigator.pushNamedAndRemoveUntil(context, Routes.addMedication,
+              ModalRoute.withName(Routes.medications));
         },
         heroTag: 'add_medication_fab',
         backgroundColor: const Color(0xFF0066CC),
@@ -193,7 +194,9 @@ class _MedicationCard extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: medication.isActive ? medication.color.withOpacity(0.2) : Colors.grey[200]!,
+            color: medication.isActive
+                ? medication.color.withOpacity(0.2)
+                : Colors.grey[200]!,
           ),
         ),
         padding: const EdgeInsets.all(16),
@@ -237,13 +240,16 @@ class _MedicationCard extends StatelessWidget {
                                   : Colors.grey[200],
                               borderRadius: BorderRadius.circular(6),
                             ),
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 4),
                             child: Text(
                               medication.isActive ? 'Active' : 'Inactive',
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w600,
-                                color: medication.isActive ? const Color(0xFF4CAF50) : Colors.black54,
+                                color: medication.isActive
+                                    ? const Color(0xFF4CAF50)
+                                    : Colors.black54,
                               ),
                             ),
                           ),
@@ -324,7 +330,9 @@ class _MedicationCard extends StatelessWidget {
                 OutlinedButton.icon(
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Edit medication feature coming soon!')),
+                      const SnackBar(
+                          content:
+                              Text('Edit medication feature coming soon!')),
                     );
                   },
                   icon: const Icon(Icons.edit_rounded, size: 16),
