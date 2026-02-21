@@ -89,7 +89,7 @@ class _ProfessionalPatientsScreenState extends State<ProfessionalPatientsScreen>
   ];
 
   String _searchQuery = '';
-  String _statusFilter = 'All';
+  String _quickFilter = 'All';
   String? _selectedGender;
   String? _selectedCondition;
   String _sortBy = 'Name';
@@ -99,13 +99,29 @@ class _ProfessionalPatientsScreenState extends State<ProfessionalPatientsScreen>
 
   List<Patient> get _filteredPatients {
     var filtered = _patients.where((p) {
-      final matchesQuery = p.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          p.condition.toLowerCase().contains(_searchQuery.toLowerCase());
-      final matchesStatus = _statusFilter == 'All' || p.status == _statusFilter;
+      final searchLower = _searchQuery.toLowerCase();
+      final matchesQuery = p.name.toLowerCase().contains(searchLower) ||
+          p.condition.toLowerCase().contains(searchLower) ||
+          p.id.toLowerCase().contains(searchLower) ||
+          p.phoneNumber.toLowerCase().contains(searchLower);
+          
+      bool matchesQuickFilter = true;
+      final now = DateTime.now();
+      if (_quickFilter == 'Requires Attention') {
+        matchesQuickFilter = p.status == 'Critical';
+      } else if (_quickFilter == 'Upcoming Appointments') {
+        matchesQuickFilter = p.appointments.any((a) {
+          final date = a.date;
+          return date.isAfter(now) || (date.year == now.year && date.month == now.month && date.day == now.day);
+        });
+      } else if (_quickFilter == 'Recent Activity') {
+        matchesQuickFilter = p.lastVisit.isAfter(now.subtract(const Duration(days: 7)));
+      }
+
       final matchesGender = _selectedGender == null || p.gender == _selectedGender;
       final matchesCondition = _selectedCondition == null || p.condition == _selectedCondition;
       
-      return matchesQuery && matchesStatus && matchesGender && matchesCondition;
+      return matchesQuery && matchesQuickFilter && matchesGender && matchesCondition;
     }).toList();
 
     switch (_sortBy) {
@@ -123,7 +139,7 @@ class _ProfessionalPatientsScreenState extends State<ProfessionalPatientsScreen>
     return filtered;
   }
 
-  final List<String> _statusOptions = ['All', 'Stable', 'Recovering', 'Critical'];
+  final List<String> _quickFilterOptions = ['All', 'Requires Attention', 'Upcoming Appointments', 'Recent Activity'];
 
   @override
   Widget build(BuildContext context) {
@@ -188,7 +204,7 @@ class _ProfessionalPatientsScreenState extends State<ProfessionalPatientsScreen>
       child: TextField(
         onChanged: (value) => setState(() => _searchQuery = value),
         decoration: InputDecoration(
-          hintText: 'Search patients, conditions...',
+          hintText: 'Search by name, ID, condition...',
           prefixIcon: const Icon(Icons.search),
           filled: true,
           fillColor: Colors.white,
@@ -244,15 +260,19 @@ class _ProfessionalPatientsScreenState extends State<ProfessionalPatientsScreen>
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
-        children: _statusOptions.map((status) {
-          final selected = _statusFilter == status;
+        children: _quickFilterOptions.map((filter) {
+          final selected = _quickFilter == filter;
           return Padding(
             padding: const EdgeInsets.only(right: 8),
             child: ChoiceChip(
-              label: Text(status),
+              label: Text(filter),
               selected: selected,
-              onSelected: (_) => setState(() => _statusFilter = status),
+              onSelected: (_) => setState(() => _quickFilter = filter),
               selectedColor: Colors.blueAccent,
+              labelStyle: TextStyle(
+                color: selected ? Colors.white : Colors.black87,
+                fontWeight: selected ? FontWeight.bold : FontWeight.normal,
+              ),
             ),
           );
         }).toList(),
