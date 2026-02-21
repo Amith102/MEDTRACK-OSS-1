@@ -77,13 +77,12 @@ class _AddPatientNoteViewState extends State<AddPatientNoteView> {
                   ),
                   prefixIcon: const Icon(Icons.label),
                 ),
-                items:
-                    _categories.map((String category) {
-                      return DropdownMenuItem<String>(
-                        value: category,
-                        child: Text(category),
-                      );
-                    }).toList(),
+                items: _categories.map((String category) {
+                  return DropdownMenuItem<String>(
+                    value: category,
+                    child: Text(category),
+                  );
+                }).toList(),
                 onChanged: (String? newValue) {
                   if (newValue != null) {
                     setState(() {

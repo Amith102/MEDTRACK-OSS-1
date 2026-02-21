@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class PatientNote {
   final String id;
   final String patientId;

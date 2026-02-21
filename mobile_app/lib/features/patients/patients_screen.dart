@@ -80,8 +80,7 @@ class _PatientsScreenState extends State<PatientsScreen> {
   String? _selectedStatus;
   List<Patient> get _filteredPatients {
     return _patients.where((p) {
-      final matchesSearch =
-          _searchQuery.isEmpty ||
+      final matchesSearch = _searchQuery.isEmpty ||
           p.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
           p.condition.toLowerCase().contains(_searchQuery.toLowerCase());
 
@@ -224,8 +223,7 @@ class _PatientsScreenState extends State<PatientsScreen> {
 
   bool _matchesCurrentView(Patient patient) {
     final query = _searchQuery.toLowerCase();
-    final matchesSearch =
-        query.isEmpty ||
+    final matchesSearch = query.isEmpty ||
         patient.name.toLowerCase().contains(query) ||
         patient.condition.toLowerCase().contains(query);
     final matchesStatus =
@@ -258,7 +256,6 @@ class _PatientsScreenState extends State<PatientsScreen> {
               label: Text('Status: $_selectedStatus'),
               onDeleted: () => setState(() => _selectedStatus = null),
             ),
-
           if (_selectedCondition != null)
             Chip(
               label: Text('Condition: $_selectedCondition'),
@@ -304,8 +301,8 @@ class _PatientsScreenState extends State<PatientsScreen> {
                   Text(
                     'Filter Patients',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                   const SizedBox(height: 16),
                   DropdownButtonFormField<String?>(
@@ -426,6 +423,10 @@ class _PatientsScreenState extends State<PatientsScreen> {
         if (index != -1) {
           _patients[index] = updatedPatient;
         }
+      });
+    } else if (updatedPatient == 'delete') {
+      setState(() {
+        _patients.removeWhere((p) => p.id == patient.id);
       });
     }
   }

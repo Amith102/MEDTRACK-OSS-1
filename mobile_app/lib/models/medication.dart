@@ -1,16 +1,16 @@
 import 'dart:ui';
 
 class Medication {
-  final int id;
-  final String name;
-  final String dosage;
-  final String frequency;
-  final List<bool> frequencyWeekly;
-  final String purpose;
-  final String icon;
-  final Color color;
-  final String nextDue;
-  final bool isActive;
+  int id;
+  String name;
+  String dosage;
+  String frequency;
+  List<bool> frequencyWeekly;
+  String purpose;
+  String icon;
+  Color color;
+  String nextDue;
+  bool isActive;
 
   Medication({
     required this.id,
