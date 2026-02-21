@@ -37,6 +37,5 @@ Map<String, WidgetBuilder> getRoutes() {
     Routes.medications: (context) => const MedicationsScreen(),
     Routes.schedules: (context) => const SchedulesScreen(),
     Routes.reminders: (context) => const RemindersScreen(),
-    Routes.addReminder: (context) => const AddReminderScreen(),
   };
 }
