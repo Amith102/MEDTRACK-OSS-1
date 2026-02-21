@@ -2,6 +2,60 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/routes.dart';
 import '../../models/reminder.dart';
 
+// Mock reminder data
+final ValueNotifier<List<Reminder>> reminders = ValueNotifier([
+  Reminder(
+    id: 1,
+    medication: 'Lisinopril',
+    patient: 'John Doe',
+    scheduledTime: '08:00 AM',
+    type: 'Morning',
+    isEnabled: true,
+    notificationCount: 3,
+    icon: '📱',
+  ),
+  Reminder(
+    id: 2,
+    medication: 'Metformin',
+    patient: 'John Doe',
+    scheduledTime: '12:30 PM',
+    type: 'Afternoon',
+    isEnabled: true,
+    notificationCount: 2,
+    icon: '🔔',
+  ),
+  Reminder(
+    id: 3,
+    medication: 'Atorvastatin',
+    patient: 'Jane Smith',
+    scheduledTime: '09:00 PM',
+    type: 'Evening',
+    isEnabled: false,
+    notificationCount: 0,
+    icon: '🌙',
+  ),
+  Reminder(
+    id: 4,
+    medication: 'Aspirin',
+    patient: 'Michael Johnson',
+    scheduledTime: '08:00 AM',
+    type: 'Morning',
+    isEnabled: true,
+    notificationCount: 1,
+    icon: '⏰',
+  ),
+  Reminder(
+    id: 5,
+    medication: 'Blood Pressure Check',
+    patient: 'John Doe',
+    scheduledTime: '05:00 PM',
+    type: 'Weekly',
+    isEnabled: true,
+    notificationCount: 2,
+    icon: '💓',
+  ),
+]);
+
 class RemindersScreen extends StatefulWidget {
   const RemindersScreen({super.key});
   static const String route = '/reminders';
@@ -11,60 +65,6 @@ class RemindersScreen extends StatefulWidget {
 }
 
 class _RemindersScreenState extends State<RemindersScreen> {
-  // Mock reminder data
-  final List<Reminder> reminders = [
-    Reminder(
-      id: 1,
-      medication: 'Lisinopril',
-      patient: 'John Doe',
-      scheduledTime: '08:00 AM',
-      type: 'Morning',
-      isEnabled: true,
-      notificationCount: 3,
-      icon: '📱',
-    ),
-    Reminder(
-      id: 2,
-      medication: 'Metformin',
-      patient: 'John Doe',
-      scheduledTime: '12:30 PM',
-      type: 'Afternoon',
-      isEnabled: true,
-      notificationCount: 2,
-      icon: '🔔',
-    ),
-    Reminder(
-      id: 3,
-      medication: 'Atorvastatin',
-      patient: 'Jane Smith',
-      scheduledTime: '09:00 PM',
-      type: 'Evening',
-      isEnabled: false,
-      notificationCount: 0,
-      icon: '🌙',
-    ),
-    Reminder(
-      id: 4,
-      medication: 'Aspirin',
-      patient: 'Michael Johnson',
-      scheduledTime: '08:00 AM',
-      type: 'Morning',
-      isEnabled: true,
-      notificationCount: 1,
-      icon: '⏰',
-    ),
-    Reminder(
-      id: 5,
-      medication: 'Blood Pressure Check',
-      patient: 'John Doe',
-      scheduledTime: '05:00 PM',
-      type: 'Weekly',
-      isEnabled: true,
-      notificationCount: 2,
-      icon: '💓',
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,43 +76,48 @@ class _RemindersScreenState extends State<RemindersScreen> {
             padding: const EdgeInsets.only(right: 16),
             child: Center(
               child: Badge.count(
-                count: reminders.where((r) => r.isEnabled).length,
+                count: reminders.value.where((r) => r.isEnabled).length,
                 child: const Icon(Icons.notifications_rounded),
               ),
             ),
           ),
         ],
       ),
-      body: reminders.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.notifications_off_rounded,
-                    size: 48,
-                    color: Colors.grey[400],
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'No reminders set',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey[600],
+      body: ValueListenableBuilder(
+          valueListenable: reminders,
+          builder: (context, value, child) {
+            return reminders.value.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.notifications_off_rounded,
+                          size: 48,
+                          color: Colors.grey[400],
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          'No reminders set',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-            )
-          : ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              itemCount: reminders.length,
-              itemBuilder: (context, index) {
-                final reminder = reminders[index];
-                return _ReminderCard(reminder: reminder);
-              },
-            ),
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
+                    itemCount: reminders.value.length,
+                    itemBuilder: (context, index) {
+                      final reminder = reminders.value[index];
+                      return _ReminderCard(reminder: reminder);
+                    },
+                  );
+          }),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final result = await Navigator.pushNamed(
@@ -121,7 +126,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
           );
           if (result != null && result is Reminder) {
             setState(() {
-              reminders.add(result);
+              reminders.value = [...reminders.value, result];
             });
           }
         },
