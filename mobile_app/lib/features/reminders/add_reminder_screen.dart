@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import '../../models/reminder.dart';
 
 class AddReminderScreen extends StatefulWidget {
-  const AddReminderScreen({super.key});
+  final Reminder? newReminder;
+  const AddReminderScreen({super.key, this.newReminder});
   static const String route = '/add_reminder';
 
   @override
@@ -11,6 +12,7 @@ class AddReminderScreen extends StatefulWidget {
 }
 
 class _AddReminderScreenState extends State<AddReminderScreen> {
+  bool get isEditing => widget.newReminder != null;
   final _formKey = GlobalKey<FormState>();
   String _medicationName = '';
   String _patientName = '';
@@ -20,6 +22,15 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
   int _notificationCount = 1;
   int id = 5;
   String? _selectedType;
+
+  @override
+  void initState() {
+    super.initState();
+    if (isEditing) {
+      _patientName = widget.newReminder!.patient;
+      _medicationName = widget.newReminder!.medication;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +54,7 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
                           }
                           return null;
                         },
+                        initialValue: _patientName,
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -86,6 +98,7 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
                           }
                           return null;
                         },
+                        initialValue: _medicationName,
                         decoration: InputDecoration(
                             enabledBorder: OutlineInputBorder(
                                 borderSide:
