@@ -13,7 +13,11 @@ class Medication {
   bool isActive;
   String? rxNumber;
   int? refillsRemaining;
+  int? refillsRemaining;
   int pillsRemaining;
+  bool isPRN;
+  int? minHoursBetweenDoses;
+  int? maxDosesPer24Hours;
 
   Medication({
     required this.id,
@@ -29,6 +33,9 @@ class Medication {
     this.rxNumber,
     this.refillsRemaining,
     this.pillsRemaining = 0,
+    this.isPRN = false,
+    this.minHoursBetweenDoses,
+    this.maxDosesPer24Hours,
   });
 
   factory Medication.fromJson(Map<String, dynamic> json) {
@@ -46,6 +53,9 @@ class Medication {
       rxNumber: json['rxNumber'] as String?,
       refillsRemaining: json['refillsRemaining'] as int?,
       pillsRemaining: json['pillsRemaining'] as int? ?? 0,
+      isPRN: json['isPRN'] as bool? ?? false,
+      minHoursBetweenDoses: json['minHoursBetweenDoses'] as int?,
+      maxDosesPer24Hours: json['maxDosesPer24Hours'] as int?,
     );
   }
 
@@ -64,6 +74,9 @@ class Medication {
       'rxNumber': rxNumber,
       'refillsRemaining': refillsRemaining,
       'pillsRemaining': pillsRemaining,
+      'isPRN': isPRN,
+      'minHoursBetweenDoses': minHoursBetweenDoses,
+      'maxDosesPer24Hours': maxDosesPer24Hours,
     };
   }
 }

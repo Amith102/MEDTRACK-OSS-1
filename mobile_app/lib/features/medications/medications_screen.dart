@@ -7,6 +7,7 @@ import '../../models/medication_log.dart';
 import '../../models/audit_log_entry.dart';
 import 'package:provider/provider.dart';
 import '../../services/profile_provider.dart';
+import '../../services/prn_tracking_engine.dart'; // Add this
 
 class MedicationsScreen extends StatefulWidget {
   const MedicationsScreen({super.key});
@@ -308,6 +309,15 @@ class _MedicationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isLowInventory = medication.pillsRemaining <= 5;
     bool needsDoctorAuth = isLowInventory && (medication.refillsRemaining == null || medication.refillsRemaining == 0);
+    
+    // Evaluate PRN rules
+    PrnStatus prnStatus = PrnStatus.allowed();
+    if (medication.isPRN && profileProvider.activeProfile != null) {
+      prnStatus = PrnTrackingEngine.checkPrnDoseAllowed(
+        medication, 
+        profileProvider.activeProfile!.medicationLogs,
+      );
+    }
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -502,21 +512,38 @@ class _MedicationCard extends StatelessWidget {
                       ),
                     ],
                   ),
+                  ),
                 ),
                 if (onTakeDose != null)
                   Padding(
                     padding: const EdgeInsets.only(right: 8.0),
-                    child: ElevatedButton.icon(
-                      onPressed: onTakeDose,
-                      icon: const Icon(Icons.check_circle_outline, size: 16),
-                      label: const Text('Take'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                      ),
-                    ),
+                    child: prnStatus.isAllowed
+                      ? ElevatedButton.icon(
+                          onPressed: onTakeDose,
+                          icon: const Icon(Icons.check_circle_outline, size: 16),
+                          label: const Text('Take'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      : ElevatedButton.icon(
+                          onPressed: null, // Disabled
+                          icon: const Icon(Icons.lock_clock, size: 16),
+                          label: Text(
+                             prnStatus.timeUntilNextDose != null 
+                             ? '${prnStatus.timeUntilNextDose!.inHours}h ${prnStatus.timeUntilNextDose!.inMinutes % 60}m'
+                             : 'Max Reached'
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            disabledBackgroundColor: Colors.grey[300],
+                            disabledForegroundColor: Colors.grey[600],
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                          ),
+                        ),
                   ),
                 OutlinedButton.icon(
                   onPressed: onEdit,
