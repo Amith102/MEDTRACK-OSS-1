@@ -15,6 +15,7 @@ import 'package:mobile_app/features/patients/professional_patients_screen.dart';
 import 'package:mobile_app/features/emergency/emergency_passport_screen.dart';
 import 'package:mobile_app/features/activity/activity_feed_screen.dart';
 import 'package:mobile_app/features/reports/consult_report_screen.dart';
+import 'package:mobile_app/features/vitals/log_vitals_screen.dart'; // Add this
 
 class Routes {
   static const String home = HomeScreen.route;
@@ -32,6 +33,7 @@ class Routes {
   static const String emergencyPassport = EmergencyPassportScreen.route;
   static const String activityFeed = ActivityFeedScreen.route;
   static const String consultReport = ConsultReportScreen.route;
+  static const String logVitals = LogVitalsScreen.route;
 }
 
 Map<String, WidgetBuilder> getRoutes() {
@@ -48,6 +50,10 @@ Map<String, WidgetBuilder> getRoutes() {
     Routes.consultReport: (context) {
        final args = ModalRoute.of(context)!.settings.arguments as Patient;
        return ConsultReportScreen(patient: args);
+    },
+    Routes.logVitals: (context) {
+       final dependentId = ModalRoute.of(context)!.settings.arguments as String;
+       return LogVitalsScreen(dependentId: dependentId);
     },
   };
 }

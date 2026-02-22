@@ -39,6 +39,7 @@ dependencies:
   uuid: ^4.5.2
   provider: ^6.1.1
   qr_flutter: ^4.1.0
+  fl_chart: ^0.66.2
 
 dev_dependencies:
   flutter_test:

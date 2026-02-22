@@ -1,5 +1,6 @@
 import 'emergency_profile.dart';
 import 'audit_log_entry.dart';
+import 'vital_sign.dart'; // Add this import
 
 class Dependent {
   final String id;
@@ -7,6 +8,7 @@ class Dependent {
   final String relation;
   final EmergencyProfile? emergencyProfile;
   final List<AuditLogEntry> activityFeed;
+  final List<VitalSign> vitalsHistory; // Added vitals list
 
   Dependent({
     required this.id,
@@ -14,6 +16,7 @@ class Dependent {
     required this.relation,
     this.emergencyProfile,
     this.activityFeed = const [],
+    this.vitalsHistory = const [], // Default to empty list
   });
 
   factory Dependent.fromJson(Map<String, dynamic> json) {
@@ -28,6 +31,10 @@ class Dependent {
               ?.map((e) => AuditLogEntry.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
+      vitalsHistory: (json['vitalsHistory'] as List<dynamic>?)
+              ?.map((e) => VitalSign.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
     );
   }
 
@@ -38,6 +45,7 @@ class Dependent {
       'relation': relation,
       'emergencyProfile': emergencyProfile?.toJson(),
       'activityFeed': activityFeed.map((e) => e.toJson()).toList(),
+      'vitalsHistory': vitalsHistory.map((e) => e.toJson()).toList(),
     };
   }
 }
