@@ -205,6 +205,7 @@ class _MedicationsScreenState extends State<MedicationsScreen> {
           final result = await Navigator.pushNamed(
             context,
             Routes.addMedication,
+            arguments: medications, // Pass current meds context
           );
 
           if (result != null && result is Medication) {
@@ -233,7 +234,7 @@ class _MedicationsScreenState extends State<MedicationsScreen> {
 
   Future<void> _newMedication(BuildContext context) async {
     final newMedication =
-        await Navigator.pushNamed(context, Routes.addMedication);
+        await Navigator.pushNamed(context, Routes.addMedication, arguments: medications);
     if (newMedication != null && newMedication is Medication) {
       setState(() {
         medications.add(newMedication);

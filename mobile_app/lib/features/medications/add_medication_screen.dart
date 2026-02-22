@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/models/medication.dart';
+import '../../services/interaction_dictionary.dart';
 import 'dart:math';
 
 class AddMedicationScreen extends StatefulWidget {
@@ -52,6 +53,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
   ];
 
   late Medication medication;
+  List<Medication> existingMedications = [];
 
   @override
   void initState() {
@@ -98,6 +100,16 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
 
   int _generateMedicationId() {
     return DateTime.now().millisecondsSinceEpoch;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Try to catch the medications list passed via arguments
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (args is List<Medication>) {
+      existingMedications = args;
+    }
   }
 
   @override
@@ -446,7 +458,15 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
               refillsRemaining: int.tryParse(_refillsController.text),
             );
 
-            Navigator.pop(context, newMedication);
+            // Run offline interaction check against current medications
+            final activeMedNames = existingMedications.map((m) => m.name).toList();
+            final warning = InteractionDictionary.checkInteraction(newMedication.name, activeMedNames);
+
+            if (warning != null) {
+              _showInteractionWarning(newMedication, warning);
+            } else {
+              Navigator.pop(context, newMedication);
+            }
             return;
           }
         },
@@ -454,6 +474,52 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
         backgroundColor: Colors.greenAccent,
         child: const Icon(Icons.check),
       ),
+    );
+  }
+
+  void _showInteractionWarning(Medication newMedication, InteractionWarning warning) {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Force user action
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Row(
+            children: [
+              const Icon(Icons.warning_amber_rounded, color: Colors.red, size: 28),
+              const SizedBox(width: 8),
+              const Text('Severe Interaction Risk', style: TextStyle(color: Colors.red)),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(warning.description, style: const TextStyle(fontSize: 15)),
+              const SizedBox(height: 16),
+              const Text(
+                'Are you sure you want to add this medication?',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel Request'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Dismiss dialog, return to form
+              },
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              onPressed: () {
+                Navigator.of(context).pop(); // Dismiss dialog
+                Navigator.pop(context, newMedication); // Force save
+              },
+              child: const Text('Acknowledge Risk & Save', style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        );
+      },
     );
   }
 }
