@@ -13,6 +13,7 @@ import 'package:mobile_app/features/schedules/schedule_appointment_view.dart';
 import 'package:mobile_app/features/schedules/schedules_screen.dart';
 import 'package:mobile_app/features/patients/professional_patients_screen.dart';
 import 'package:mobile_app/features/emergency/emergency_passport_screen.dart';
+import 'package:mobile_app/features/activity/activity_feed_screen.dart';
 
 class Routes {
   static const String home = HomeScreen.route;
@@ -28,6 +29,7 @@ class Routes {
   static const String addReminder = AddReminderScreen.route;
   static const String professionalPatients = ProfessionalPatientsScreen.route;
   static const String emergencyPassport = EmergencyPassportScreen.route;
+  static const String activityFeed = ActivityFeedScreen.route;
 }
 
 Map<String, WidgetBuilder> getRoutes() {
@@ -40,5 +42,6 @@ Map<String, WidgetBuilder> getRoutes() {
     Routes.schedules: (context) => const SchedulesScreen(),
     Routes.reminders: (context) => const RemindersScreen(),
     Routes.emergencyPassport: (context) => const EmergencyPassportScreen(),
+    Routes.activityFeed: (context) => const ActivityFeedScreen(),
   };
 }

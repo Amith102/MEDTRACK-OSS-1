@@ -7,6 +7,7 @@ class MedicationLog {
   final DateTime? takenTime;
   final String status; // "Taken" or "Skipped"
   final String? notes;
+  final String? administeredBy;
 
   MedicationLog({
     String? id,
@@ -15,6 +16,7 @@ class MedicationLog {
     this.takenTime,
     required this.status,
     this.notes,
+    this.administeredBy,
   }) : id = id ?? const Uuid().v4();
 
   factory MedicationLog.fromJson(Map<String, dynamic> json) {
@@ -27,6 +29,7 @@ class MedicationLog {
           : null,
       status: json['status'] as String,
       notes: json['notes'] as String?,
+      administeredBy: json['administeredBy'] as String?,
     );
   }
 
@@ -38,6 +41,7 @@ class MedicationLog {
       'takenTime': takenTime?.toIso8601String(),
       'status': status,
       'notes': notes,
+      'administeredBy': administeredBy,
     };
   }
 }

@@ -3,6 +3,7 @@ import 'package:mobile_app/features/home/home_screen.dart';
 import 'package:mobile_app/features/medications/medications_screen.dart';
 import 'package:mobile_app/features/reminders/reminders_screen.dart';
 import 'package:mobile_app/features/schedules/schedules_screen.dart';
+import 'package:mobile_app/features/activity/activity_feed_screen.dart';
 import 'package:provider/provider.dart';
 import '../../services/profile_provider.dart';
 import '../../models/dependent.dart';
@@ -24,7 +25,7 @@ class MainScreenState extends State<MainScreen> {
     PatientsScreen(),
     MedicationsScreen(),
     SchedulesScreen(),
-    RemindersScreen(),
+    ActivityFeedScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -137,9 +138,9 @@ class MainScreenState extends State<MainScreen> {
               label: 'Schedule',
             ),
             NavigationDestination(
-              icon: Icon(Icons.notifications_outlined),
-              selectedIcon: Icon(Icons.notifications_rounded),
-              label: 'Reminders',
+              icon: Icon(Icons.history_outlined),
+              selectedIcon: Icon(Icons.history_rounded),
+              label: 'Activity',
             ),
           ],
         ),

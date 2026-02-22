@@ -3,6 +3,8 @@ import 'package:mobile_app/routes.dart';
 
 import 'package:mobile_app/routes.dart';
 import '../../models/medication.dart';
+import '../../models/medication_log.dart';
+import '../../models/audit_log_entry.dart';
 import 'package:provider/provider.dart';
 import '../../services/profile_provider.dart';
 
@@ -148,12 +150,28 @@ class _MedicationsScreenState extends State<MedicationsScreen> {
                     final medication = profileMeds[index];
                     return _MedicationCard(
                   medication: medication,
+                  profileProvider: profileProvider,
                   onEdit: () => _editMedication(context, medication),
                   onTakeDose: () {
                     setState(() {
                       if (medication.pillsRemaining > 0) {
                         medication.pillsRemaining--;
                         
+                        // Create Audit Log
+                        final caregiverName = profileProvider.primaryCaregiver?.name ?? "Primary Caregiver";
+                        final aLog = AuditLogEntry(
+                           id: DateTime.now().millisecondsSinceEpoch.toString(),
+                           timestamp: DateTime.now(),
+                           action: "Administered ${medication.dosage} of ${medication.name}",
+                           caregiverName: caregiverName,
+                           type: "medication"
+                        );
+
+                        // Attach to active dependent profile 
+                        if (profileProvider.activeProfile != null) {
+                           profileProvider.activeProfile!.activityFeed.add(aLog);
+                        }
+
                         // Show a quick snackbar confirmation
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -279,10 +297,11 @@ class _FilterChip extends StatelessWidget {
 
 class _MedicationCard extends StatelessWidget {
   final Medication medication;
+  final ProfileProvider profileProvider;
   final VoidCallback onEdit;
   final VoidCallback? onTakeDose; // Add onTakeDose callback
 
-  const _MedicationCard({required this.medication, required this.onEdit, this.onTakeDose});
+  const _MedicationCard({required this.medication, required this.profileProvider, required this.onEdit, this.onTakeDose});
 
   @override
   Widget build(BuildContext context) {
