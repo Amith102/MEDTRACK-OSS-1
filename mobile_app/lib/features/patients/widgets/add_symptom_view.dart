@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../services/mock_weather_service.dart';
 
 class AddSymptomView extends StatefulWidget {
   final Function(Map<String, dynamic>) onSave;
@@ -19,6 +20,7 @@ class _AddSymptomViewState extends State<AddSymptomView> {
   final _symptomNameController = TextEditingController();
   final _notesController = TextEditingController();
   double _severity = 1.0;
+  bool _isFetchingWeather = false;
 
   @override
   void dispose() {
@@ -27,15 +29,24 @@ class _AddSymptomViewState extends State<AddSymptomView> {
     super.dispose();
   }
 
-  void _saveForm() {
+  void _saveForm() async {
     if (_formKey.currentState!.validate()) {
+      setState(() => _isFetchingWeather = true);
+      
+      final weatherService = MockWeatherService();
+      final envContext = await weatherService.fetchCurrentConditions();
+
       final symptomData = {
         'patientId': widget.patientId,
         'date': DateTime.now().toIso8601String(),
         'symptomName': _symptomNameController.text.trim(),
         'severity': _severity.toInt(),
         'notes': _notesController.text.trim(),
+        'environment': envContext.toJson(),
       };
+
+      if (!mounted) return;
+      setState(() => _isFetchingWeather = false);
 
       widget.onSave(symptomData);
       Navigator.of(context).pop();
@@ -115,11 +126,17 @@ class _AddSymptomViewState extends State<AddSymptomView> {
               ),
               const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: _saveForm,
+                onPressed: _isFetchingWeather ? null : _saveForm,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                child: const Text('Save Symptom Log'),
+                child: _isFetchingWeather 
+                    ? const SizedBox(
+                        height: 20, 
+                        width: 20, 
+                        child: CircularProgressIndicator(strokeWidth: 2)
+                      )
+                    : const Text('Save Symptom Log'),
               ),
               const SizedBox(height: 24),
             ],
