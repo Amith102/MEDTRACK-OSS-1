@@ -22,6 +22,9 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
   final _frequencyController = TextEditingController();
   final _purposeController = TextEditingController();
   final _iconController = TextEditingController();
+  final _rxNumberController = TextEditingController();
+  final _refillsController = TextEditingController();
+  final _pillsController = TextEditingController();
 
   List<bool> selectedDays = [true, true, true, true, true, true, true];
   List<String> days = [
@@ -41,6 +44,9 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
     _frequencyController.dispose();
     _purposeController.dispose();
     _iconController.dispose();
+    _rxNumberController.dispose();
+    _refillsController.dispose();
+    _pillsController.dispose();
     super.dispose();
     "Saturday"
   ];
@@ -78,6 +84,16 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
         isActive: true,
       );
     }
+    
+    // Initialize controller values for both modes
+    _nameController.text = medication.name;
+    _dosageController.text = medication.dosage;
+    _frequencyController.text = medication.frequency;
+    _purposeController.text = medication.purpose;
+    _iconController.text = medication.icon;
+    _rxNumberController.text = medication.rxNumber ?? '';
+    _refillsController.text = medication.refillsRemaining?.toString() ?? '';
+    _pillsController.text = medication.pillsRemaining.toString();
   }
 
   int _generateMedicationId() {
@@ -179,6 +195,52 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                     fillColor: Colors.grey[100],
                     hintText: 'Enter an Icon (e.g. 💊, 💉)',
                   ),
+                ),
+                SizedBox(height: 16),
+                TextFormField(
+                  controller: _rxNumberController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey[100],
+                    hintText: 'Rx Number (Optional)',
+                  ),
+                ),
+                SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: _pillsController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                          hintText: 'Pills Remaining',
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 16),
+                    Expanded(
+                      child: TextFormField(
+                        controller: _refillsController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                          hintText: 'Refills left',
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(height: 32),
                 Container(
@@ -379,15 +441,13 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
               )], // Random color
               nextDue: 'Scheduled', // Default value
               isActive: true,
+              rxNumber: _rxNumberController.text.isNotEmpty ? _rxNumberController.text : null,
+              pillsRemaining: int.tryParse(_pillsController.text) ?? 0,
+              refillsRemaining: int.tryParse(_refillsController.text),
             );
 
             Navigator.pop(context, newMedication);
-            _formKey.currentState!.save();
-            medication.frequencyWeekly = selectedDays;
-            if (medication.icon == '' || medication.icon.isEmpty) {
-              medication.icon = '💊';
-            }
-            Navigator.pop(context, medication);
+            return;
           }
         },
         heroTag: 'save_medication_fab',

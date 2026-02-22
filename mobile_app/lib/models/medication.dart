@@ -11,6 +11,9 @@ class Medication {
   Color color;
   String nextDue;
   bool isActive;
+  String? rxNumber;
+  int? refillsRemaining;
+  int pillsRemaining;
 
   Medication({
     required this.id,
@@ -23,6 +26,9 @@ class Medication {
     required this.color,
     required this.nextDue,
     required this.isActive,
+    this.rxNumber,
+    this.refillsRemaining,
+    this.pillsRemaining = 0,
   });
 
   factory Medication.fromJson(Map<String, dynamic> json) {
@@ -37,6 +43,9 @@ class Medication {
       color: Color(json['color'] as int),
       nextDue: json['nextDue'] as String,
       isActive: json['isActive'] as bool,
+      rxNumber: json['rxNumber'] as String?,
+      refillsRemaining: json['refillsRemaining'] as int?,
+      pillsRemaining: json['pillsRemaining'] as int? ?? 0,
     );
   }
 
@@ -52,6 +61,9 @@ class Medication {
       'color': color.value,
       'nextDue': nextDue,
       'isActive': isActive,
+      'rxNumber': rxNumber,
+      'refillsRemaining': refillsRemaining,
+      'pillsRemaining': pillsRemaining,
     };
   }
 }
