@@ -351,6 +351,11 @@ class _PatientDetailsViewState extends State<PatientDetailsView> {
                 );
               }
             }),
+            _buildActionButton(context, Icons.summarize, 'Report', Colors.teal,
+                onTap: () {
+              Navigator.pushNamed(context, Routes.consultReport,
+                  arguments: _currentPatient);
+            }),
           ],
         ),
     );
